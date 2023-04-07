@@ -19,9 +19,9 @@ public class ParkingLotController {
 		return parkingLotService.createParkingLot(number);
 	}
 	
-//	@GetMapping("/park")
-//	public String allocateSlot(@RequestParam String carnumber,String color) {
-//		return parkingLotService.slotAllocate(carnumber, color);
-//	}
+	@GetMapping("/park")
+	public String allocateSlot(@RequestParam String carnumber,String color) {
+		return parkingLotService.parkSlot(carnumber, color);
+	}
 
 }
