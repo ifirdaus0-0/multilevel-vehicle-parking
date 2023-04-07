@@ -49,4 +49,9 @@ public class ParkingLotController {
 		return parkingLotService.vacateParkingSlot(slotNo);
 	}
 	
+	@GetMapping("/status")
+	public String parkingLotStatus() {
+		return parkingLotService.parkingLotStatus();
+	}
+	
 }

@@ -1,12 +1,15 @@
 package com.parking.vehicleparking.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.aggregation.ArrayOperators.In;
 import org.springframework.stereotype.Service;
 
+import com.mongodb.client.model.Collation;
+import com.mongodb.client.model.CollationStrength;
 import com.parking.vehicleparking.domain.Car;
 import com.parking.vehicleparking.domain.ParkingLot;
 import com.parking.vehicleparking.repository.CarRepository;
@@ -129,7 +132,21 @@ public class ParkingLotService {
 		return String.format("Slot no %d is already free", slotNo);
 	}
 	
-	
+	public String parkingLotStatus() {
+		List<Car> allCarsList = getAllCars();
+		Collections.sort(allCarsList,(c1,c2)->c1.getSlotNo()-c2.getSlotNo());
+		
+		if(allCarsList==null || allCarsList.isEmpty()) return "There is no Car in Parking Lot";
+		StringBuffer allStatus = new StringBuffer("Slot No.| Registration No| Colour \n");
+		int i=1;
+		for(Car car : allCarsList) {
+			String carInfo = i +".   "+car.getSlotNo()+"     "+ car.getCarnumber()+"     "+car.getColor()+"\n";
+			allStatus.append(carInfo);
+			i++;
+		}
+		
+		return allStatus.toString();
+	}
 	
 
 
