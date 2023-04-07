@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.parking.vehicleparking.exception.ParkingLotException;
 import com.parking.vehicleparking.service.ParkingLotService;
 
 
@@ -41,7 +42,9 @@ public class ParkingLotController {
 	
 	@GetMapping("/slot_numbers_for_cars_with_colour")
 	public List<Integer> getSlotNoByColor(@RequestParam String color){
-		return parkingLotService.getSlotByColor(color);
+		List<Integer> slots =parkingLotService.getSlotByColor(color);
+		if(slots.isEmpty()) throw new ParkingLotException("Not Found");
+		return slots;
 	}
 	
 	@GetMapping("/leave")
