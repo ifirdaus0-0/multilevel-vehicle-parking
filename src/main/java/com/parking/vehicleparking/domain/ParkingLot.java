@@ -1,5 +1,4 @@
 package com.parking.vehicleparking.domain;
-import java.util.HashMap;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;

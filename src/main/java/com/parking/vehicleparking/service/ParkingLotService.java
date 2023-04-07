@@ -5,11 +5,8 @@ import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.aggregation.ArrayOperators.In;
 import org.springframework.stereotype.Service;
 
-import com.mongodb.client.model.Collation;
-import com.mongodb.client.model.CollationStrength;
 import com.parking.vehicleparking.domain.Car;
 import com.parking.vehicleparking.domain.ParkingLot;
 import com.parking.vehicleparking.repository.CarRepository;
@@ -59,7 +56,7 @@ public class ParkingLotService {
 	
 	public String parkCar(String carnumber, String color) {
 		if(ParkingLotManager.getManager().getParkedCars()==null || ParkingLotManager.getManager().getParkedCars().isEmpty()) {
-			ParkingLotManager.getManager().initialiseParkingLot(getParkingLotData(), getAllCars());
+			ParkingLotManager.getManager().initializeParkingLot(getParkingLotData(), getAllCars());
 		}
 		Car car = new Car();
 		car.setCarnumber(carnumber);
@@ -118,7 +115,7 @@ public class ParkingLotService {
 	public String vacateParkingSlot(int slotNo) {
 		List<Car> allCars = getAllCars();
 		if(ParkingLotManager.getManager().getParkedCars()==null || ParkingLotManager.getManager().getParkedCars().isEmpty()) {
-			ParkingLotManager.getManager().initialiseParkingLot(getParkingLotData(), allCars);
+			ParkingLotManager.getManager().initializeParkingLot(getParkingLotData(), allCars);
 		}
 		
 		for(Car car : allCars) {

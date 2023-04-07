@@ -45,7 +45,7 @@ public class ParkingLotManager {
 	
 	public void intialiseParkingLotWithCars(List<Car> savedCars) {
 		if(savedCars!=null &&!savedCars.isEmpty() ) {
-			//initialize set
+			//initialize parkedCars
 			Set<Car> parkedCars = new HashSet<>();
 			for(Car car : savedCars) {
 				parkedCars.add(car);
@@ -53,7 +53,6 @@ public class ParkingLotManager {
 			this.parkedCars = parkedCars;
 			
 			//initialize parking slot 
-			
 			Car[] parkedSlots =  new Car[parkigLotMaxCapacity];
 			for(Car car : savedCars) {
 				parkedSlots[car.getSlotNo()-1]  = car;
@@ -65,7 +64,7 @@ public class ParkingLotManager {
 	
 	
 	
-    public void initialiseParkingLot(int capacity, List<Car> cars) {
+    public void initializeParkingLot(int capacity, List<Car> cars) {
     	this.parkigLotMaxCapacity = capacity;
     	if(parkigLotMaxCapacity>0) {
     		slots= new Car[parkigLotMaxCapacity];
@@ -102,6 +101,7 @@ public class ParkingLotManager {
 			if(car!=null && car.getSlotNo()==slotNo) {
 				slots[car.getSlotNo()-1]=null;
 				parkedCars.remove(car);
+				parkigLotCurrCapacity--;
 			}
 		}
 		
