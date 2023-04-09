@@ -26,34 +26,27 @@ public class ParkingLotService {
 	public String createParkingLot(int numberOfSlots) {
 		int capacity = getParkingLotData();
 		if(capacity!=-1) {
-			ParkingLotManager.getManager().initializeParkingLotcapacity(capacity);
 			return "Parking Lot is Already created with Capacity = " + capacity;
 		}
 		ParkingLot result = parkingLotRepository.save(new ParkingLot(numberOfSlots));
 		if(result!=null) {
 			//initialize parking lot manager
-			ParkingLotManager.getManager().createParkingLot(numberOfSlots);
+			ParkingLotManager.getManager().initializeParkingLot(numberOfSlots,getAllCars());
 			return String.format("Created a parking lot with %d slots", numberOfSlots);
 		}
-		else return "error";
+		else return "DB error, unbale create entry in db for parking lot";
 	}
-	
-	
+
 	public int getParkingLotData() {
 		List<ParkingLot> list = parkingLotRepository.findAll();
 		if(list!=null && !list.isEmpty()) return list.iterator().next().getMaxCapacity();
 		return -1;
 	}
-	
-	
-	
-	
+
 	public List<Car> getAllCars() {
 		return carRepository.findAll();
 	}
-	
-	
-	
+
 	public String parkCar(String carnumber, String color) {
 		if(ParkingLotManager.getManager().getParkedCars()==null || ParkingLotManager.getManager().getParkedCars().isEmpty()) {
 			ParkingLotManager.getManager().initializeParkingLot(getParkingLotData(), getAllCars());
@@ -93,7 +86,6 @@ public class ParkingLotService {
 						result.add(car.getSlotNo());
 				}
 			}
-			
 		}
 		return result;
 	}
@@ -117,14 +109,16 @@ public class ParkingLotService {
 		if(ParkingLotManager.getManager().getParkedCars()==null || ParkingLotManager.getManager().getParkedCars().isEmpty()) {
 			ParkingLotManager.getManager().initializeParkingLot(getParkingLotData(), allCars);
 		}
-		
+        if(ParkingLotManager.getManager().getParkigLotMaxCapacity() < slotNo) {
+            throw new IllegalArgumentException("Invalid parking slot");
+        }
 		for(Car car : allCars) {
-			if(car.getSlotNo()==slotNo) {
-				ParkingLotManager.getManager().vacateParkingSlot(slotNo);
-				carRepository.delete(car);
-				return String.format("Slot number %d is free", slotNo);
-			}
-		}
+            if(car.getSlotNo()==slotNo) {
+                ParkingLotManager.getManager().vacateParkingSlot(car,slotNo);
+                carRepository.delete(car);
+                return String.format("Slot number %d is free", slotNo);
+            }
+        }
 		
 		return String.format("Slot no %d is already free", slotNo);
 	}
